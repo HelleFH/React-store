@@ -73,7 +73,12 @@ BasketItem.propTypes = {
     keywords: PropType.arrayOf(PropType.string),
     selectedSize: PropType.string,
     imageCollection: PropType.arrayOf(PropType.string),
-    sizes: PropType.arrayOf(PropType.string),
+    sizesWithPrices: PropType.arrayOf(
+      PropType.shape({
+        size: PropType.string.isRequired,
+        price: PropType.number.isRequired
+      })
+    ).isRequired,
     image: PropType.string,
     imageUrl: PropType.string,
     isFeatured: PropType.bool,

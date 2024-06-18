@@ -117,8 +117,13 @@ ProductItem.propTypes = {
     description: PropType.string,
     keywords: PropType.arrayOf(PropType.string),
     imageCollection: PropType.arrayOf(PropType.object),
-    sizes: PropType.arrayOf(PropType.string),
-    image: PropType.string,
+    sizesWithPrices: PropType.arrayOf(
+      PropType.shape({
+        size: PropType.string.isRequired,
+        price: PropType.number.isRequired
+      })
+    ).isRequired,
+        image: PropType.string,
     imageUrl: PropType.string,
     isFeatured: PropType.bool,
     isRecommended: PropType.bool,

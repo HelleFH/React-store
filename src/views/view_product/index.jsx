@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
-import {ImageLoader, MessageDisplay } from '@/components/common';
+import { ImageLoader, MessageDisplay } from '@/components/common';
 import { ProductShowcaseGrid } from '@/components/product';
 import { RECOMMENDED_PRODUCTS, SHOP } from '@/constants/routes';
 import { displayMoney } from '@/helpers/utils';
@@ -23,6 +23,7 @@ const ViewProduct = () => {
 
   const [selectedImage, setSelectedImage] = useState(product?.image || '');
   const [selectedSize, setSelectedSize] = useState('');
+  const [selectedPrice, setSelectedPrice] = useState(product?.sizesWithPrices[0]?.price || 0);
 
   const {
     recommendedProducts,
@@ -33,17 +34,20 @@ const ViewProduct = () => {
   const colorOverlay = useRef(null);
 
   useEffect(() => {
-    setSelectedImage(product?.image);
+    if (product) {
+      setSelectedImage(product.image);
+      setSelectedSize(product.sizesWithPrices[0]?.size || '');
+      setSelectedPrice(product.sizesWithPrices[0]?.price || 0);
+    }
   }, [product]);
 
   const onSelectedSizeChange = (newValue) => {
-    setSelectedSize(newValue.value);
+    setSelectedSize(newValue.size);
+    setSelectedPrice(newValue.price);
   };
 
-
-
   const handleAddToBasket = () => {
-    addToBasket({ ...product,  selectedSize: selectedSize || product.sizes[0] });
+    addToBasket({ ...product, selectedSize, price: selectedPrice });
   };
 
   return (
@@ -107,13 +111,12 @@ const ViewProduct = () => {
                 <Select
                   placeholder="--Select Size--"
                   onChange={onSelectedSizeChange}
-                  options={product.sizes.sort((a, b) => (a < b ? -1 : 1)).map((size) => ({ label: `${size} mm`, value: size }))}
+                  options={product.sizesWithPrices.sort((a, b) => (a.size < b.size ? -1 : 1)).map((size) => ({ label: `${size.size} mm`, value: size.size, size: size.size, price: size.price }))}
                   styles={{ menu: (provided) => ({ ...provided, zIndex: 10 }) }}
                 />
               </div>
               <br />
-              
-              <h1>{displayMoney(product.price)}</h1>
+              <h1>{displayMoney(selectedPrice)}</h1>
               <div className="product-modal-action">
                 <button
                   className={`button button-small ${isItemOnBasket(product.id) ? 'button-border button-border-gray' : ''}`}
