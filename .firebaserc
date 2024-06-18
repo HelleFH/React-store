@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "ecommerce"
-  }
+    "default": "ecommerce-777c9",
+    "staging": "ecommerce-777c9"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }
