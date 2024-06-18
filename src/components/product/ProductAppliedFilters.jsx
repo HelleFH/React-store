@@ -7,7 +7,7 @@ import { applyFilter } from '@/redux/actions/filterActions';
 
 const ProductAppliedFilters = ({ filteredProductsCount }) => {
   const filter = useSelector((state) => state.filter, shallowEqual);
-  const fields = ['brand', 'minPrice', 'maxPrice', 'sortBy', 'keyword'];
+  const fields = ['minPrice', 'maxPrice', 'sortBy', 'keyword'];
   const isFiltered = fields.some((key) => !!filter[key]);
   const dispatch = useDispatch();
 
@@ -19,9 +19,7 @@ const ProductAppliedFilters = ({ filteredProductsCount }) => {
     dispatch(applyFilter({ minPrice: 0, maxPrice: 0 }));
   };
 
-  const onRemoveBrandFilter = () => {
-    dispatch(applyFilter({ brand: '' }));
-  };
+
 
   const onRemoveSortFilter = () => {
     dispatch(applyFilter({ sortBy: '' }));
@@ -51,19 +49,7 @@ const ProductAppliedFilters = ({ filteredProductsCount }) => {
             </div>
           </div>
         )}
-        {filter.brand && (
-          <div className="pill-wrapper">
-            <span className="d-block">Brand</span>
-            <div className="pill padding-right-l">
-              <h5 className="pill-content margin-0">{filter.brand}</h5>
-              <div className="pill-remove" onClick={onRemoveBrandFilter} role="presentation">
-                <h5 className="margin-0 text-subtle">
-                  <CloseCircleOutlined />
-                </h5>
-              </div>
-            </div>
-          </div>
-        )}
+        
         {(!!filter.minPrice || !!filter.maxPrice) && (
           <div className="pill-wrapper">
             <span className="d-block">Price Range</span>

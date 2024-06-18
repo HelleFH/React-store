@@ -2,7 +2,7 @@
 import { CheckOutlined, LoadingOutlined } from '@ant-design/icons';
 import { ImageLoader } from '@/components/common';
 import {
-  CustomColorInput, CustomCreatableSelect, CustomInput, CustomTextarea
+   CustomCreatableSelect, CustomInput, CustomTextarea
 } from '@/components/formik';
 import {
   Field, FieldArray, Form, Formik
@@ -12,20 +12,12 @@ import PropType from 'prop-types';
 import React from 'react';
 import * as Yup from 'yup';
 
-// Default brand names that I used. You can use what you want
-const brandOptions = [
-  { value: 'Salt Maalat', label: 'Salt Maalat' },
-  { value: 'Betsin Maalat', label: 'Betsin Maalat' },
-  { value: 'Sexbomb', label: 'Sexbomb' },
-  { value: 'Black Kibal', label: 'Black Kibal' }
-];
 
 const FormSchema = Yup.object().shape({
   name: Yup.string()
     .required('Product name is required.')
     .max(60, 'Product name must only be less than 60 characters.'),
-  brand: Yup.string()
-    .required('Brand name is required.'),
+
   price: Yup.number()
     .positive('Price is invalid.')
     .integer('Price should be an integer.')
@@ -40,19 +32,16 @@ const FormSchema = Yup.object().shape({
     .of(Yup.string())
     .min(1, 'Please enter at least 1 keyword for this product.'),
   sizes: Yup.array()
-    .of(Yup.number())
+    .of(Yup.string())
     .min(1, 'Please enter a size for this product.'),
   isFeatured: Yup.boolean(),
   isRecommended: Yup.boolean(),
-  availableColors: Yup.array()
-    .of(Yup.string().required())
-    .min(1, 'Please add a default color for this product.')
+  
 });
 
 const ProductForm = ({ product, onSubmit, isLoading }) => {
   const initFormikValues = {
     name: product?.name || '',
-    brand: product?.brand || '',
     price: product?.price || 0,
     maxQuantity: product?.maxQuantity || 0,
     description: product?.description || '',
@@ -60,7 +49,6 @@ const ProductForm = ({ product, onSubmit, isLoading }) => {
     sizes: product?.sizes || [],
     isFeatured: product?.isFeatured || false,
     isRecommended: product?.isRecommended || false,
-    availableColors: product?.availableColors || []
   };
 
   const {
@@ -113,15 +101,7 @@ const ProductForm = ({ product, onSubmit, isLoading }) => {
                 </div>
                 &nbsp;
                 <div className="product-form-field">
-                  <CustomCreatableSelect
-                    defaultValue={{ label: values.brand, value: values.brand }}
-                    name="brand"
-                    iid="brand"
-                    options={brandOptions}
-                    disabled={isLoading}
-                    placeholder="Select/Create Brand"
-                    label="* Brand"
-                  />
+                
                 </div>
               </div>
               <div className="product-form-field">
@@ -175,7 +155,7 @@ const ProductForm = ({ product, onSubmit, isLoading }) => {
                     defaultValue={values.keywords.map((key) => ({ value: key, label: key }))}
                     name="sizes"
                     iid="sizes"
-                    type="number"
+                    type="string"
                     isMulti
                     disabled={isLoading}
                     placeholder="Create/Select Sizes"
@@ -183,13 +163,7 @@ const ProductForm = ({ product, onSubmit, isLoading }) => {
                   />
                 </div>
               </div>
-              <div className="product-form-field">
-                <FieldArray
-                  name="availableColors"
-                  disabled={isLoading}
-                  component={CustomColorInput}
-                />
-              </div>
+       
               <div className="product-form-field">
                 <span className="d-block padding-s">Image Collection</span>
                 {!isFileLoading && (
@@ -316,7 +290,6 @@ const ProductForm = ({ product, onSubmit, isLoading }) => {
 ProductForm.propTypes = {
   product: PropType.shape({
     name: PropType.string,
-    brand: PropType.string,
     price: PropType.number,
     maxQuantity: PropType.number,
     description: PropType.string,
@@ -327,7 +300,6 @@ ProductForm.propTypes = {
     imageUrl: PropType.string,
     isFeatured: PropType.bool,
     isRecommended: PropType.bool,
-    availableColors: PropType.arrayOf(PropType.string)
   }).isRequired,
   onSubmit: PropType.func.isRequired,
   isLoading: PropType.bool.isRequired

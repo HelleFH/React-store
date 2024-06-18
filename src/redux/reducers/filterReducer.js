@@ -1,7 +1,7 @@
 import {
   APPLY_FILTER,
   CLEAR_RECENT_SEARCH,
-  REMOVE_SELECTED_RECENT, RESET_FILTER, SET_BRAND_FILTER,
+  REMOVE_SELECTED_RECENT, RESET_FILTER,
   SET_MAX_PRICE_FILTER,
   SET_MIN_PRICE_FILTER, SET_TEXT_FILTER
 } from '@/constants/constants';
@@ -9,7 +9,6 @@ import {
 const initState = {
   recent: [],
   keyword: '',
-  brand: '',
   minPrice: 0,
   maxPrice: 0,
   sortBy: ''
@@ -23,11 +22,7 @@ export default (state = initState, action) => {
         recent: (!!state.recent.find((n) => n === action.payload) || action.payload === '') ? state.recent : [action.payload, ...state.recent],
         keyword: action.payload
       };
-    case SET_BRAND_FILTER:
-      return {
-        ...state,
-        brand: action.payload
-      };
+    
     case SET_MAX_PRICE_FILTER:
       return {
         ...state,

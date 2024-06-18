@@ -15,7 +15,6 @@ const Filters = ({ closeModal }) => {
     products: state.products.items
   }));
   const [field, setFilter] = useState({
-    brand: filter.brand,
     minPrice: filter.minPrice,
     maxPrice: filter.maxPrice,
     sortBy: filter.sortBy
@@ -43,11 +42,7 @@ const Filters = ({ closeModal }) => {
     setFilter({ ...field, minPrice: minVal, maxPrice: maxVal });
   };
 
-  const onBrandFilterChange = (e) => {
-    const val = e.target.value;
 
-    setFilter({ ...field, brand: val });
-  };
 
   const onSortFilterChange = (e) => {
     setFilter({ ...field, sortBy: e.target.value });
@@ -68,7 +63,7 @@ const Filters = ({ closeModal }) => {
   };
 
   const onResetFilter = () => {
-    const filterFields = ['brand', 'minPrice', 'maxPrice', 'sortBy'];
+    const filterFields = ['minPrice', 'maxPrice', 'sortBy'];
 
     if (filterFields.some((key) => !!filter[key])) {
       dispatch(resetFilter());
@@ -79,27 +74,6 @@ const Filters = ({ closeModal }) => {
 
   return (
     <div className="filters">
-      <div className="filters-field">
-        <span>Brand</span>
-        <br />
-        <br />
-        {products.length === 0 && isLoading ? (
-          <h5 className="text-subtle">Loading Filter</h5>
-        ) : (
-          <select
-            className="filters-brand"
-            value={field.brand}
-            disabled={isLoading || products.length === 0}
-            onChange={onBrandFilterChange}
-          >
-            <option value="">All Brands</option>
-            <option value="salt">Salt Maalat</option>
-            <option value="betsin">Betsin Maalat</option>
-            <option value="black">Black Kibal</option>
-            <option value="sexbomb">Sexbomb</option>
-          </select>
-        )}
-      </div>
       <div className="filters-field">
         <span>Sort By</span>
         <br />

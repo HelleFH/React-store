@@ -1,7 +1,7 @@
 import {
   APPLY_FILTER,
   CLEAR_RECENT_SEARCH,
-  REMOVE_SELECTED_RECENT, RESET_FILTER, SET_BRAND_FILTER,
+  REMOVE_SELECTED_RECENT, RESET_FILTER, 
   SET_MAX_PRICE_FILTER,
   SET_MIN_PRICE_FILTER, SET_TEXT_FILTER
 } from '@/constants/constants';
@@ -11,10 +11,7 @@ export const setTextFilter = (keyword) => ({
   payload: keyword
 });
 
-export const setBrandFilter = (brand) => ({
-  type: SET_BRAND_FILTER,
-  payload: brand
-});
+
 
 export const setMinPriceFilter = (min) => ({
   type: SET_MIN_PRICE_FILTER,

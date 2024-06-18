@@ -33,7 +33,6 @@ const AddProduct = () => {
           onSubmit={onSubmit}
           product={{
             name: '',
-            brand: '',
             price: 0,
             maxQuantity: 0,
             description: '',
@@ -41,7 +40,6 @@ const AddProduct = () => {
             image: '',
             isFeatured: false,
             isRecommended: false,
-            availableColors: [],
             imageCollection: []
           }}
         />

@@ -55,9 +55,7 @@ const handleAddToBasket = () => {
             <h5 className="product-card-name text-overflow-ellipsis margin-auto">
               {product.name || <Skeleton width={80} />}
             </h5>
-            <p className="product-card-brand">
-              {product.brand || <Skeleton width={60} />}
-            </p>
+        
             <h4 className="product-card-price">
               {product.price ? displayMoney(product.price) : <Skeleton width={40} />}
             </h4>
