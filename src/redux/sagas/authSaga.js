@@ -7,8 +7,7 @@ import {
   SIGNOUT, SIGNUP
 } from '@/constants/constants';
 import { SIGNIN as ROUTE_SIGNIN } from '@/constants/routes';
-import defaultAvatar from '@/images/defaultavatar.jpg';
-import defaultBanner from '@/images/defaultbanner.jpg';
+
 import { call, put } from 'redux-saga/effects';
 import { signInSuccess, signOutSuccess } from '@/redux/actions/authActions';
 import { clearBasket, setBasketItems } from '@/redux/actions/basketActions';
@@ -92,8 +91,7 @@ function* authSaga({ type, payload }) {
         const fullname = payload.fullname.split(' ').map((name) => name[0].toUpperCase().concat(name.substring(1))).join(' ');
         const user = {
           fullname,
-          avatar: defaultAvatar,
-          banner: defaultBanner,
+    
           email: payload.email,
           address: '',
           basket: [],
@@ -158,8 +156,7 @@ function* authSaga({ type, payload }) {
         // add the user if auth provider is not password
         const user = {
           fullname: payload.displayName ? payload.displayName : 'User',
-          avatar: payload.photoURL ? payload.photoURL : defaultAvatar,
-          banner: defaultBanner,
+          avatar: payload.photoURL  ,
           email: payload.email,
           address: '',
           basket: [],
