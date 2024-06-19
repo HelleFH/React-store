@@ -67,7 +67,7 @@ const AppRouter = () => (
           path={ROUTES.ACCOUNT}
         />
         <ClientRoute
-          component={view.EditAccount}
+          component={view.EditProfile}
           exact
           path={ROUTES.ACCOUNT_EDIT}
         />
