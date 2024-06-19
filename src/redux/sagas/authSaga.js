@@ -7,7 +7,8 @@ import {
   SIGNOUT, SIGNUP
 } from '@/constants/constants';
 import { SIGNIN as ROUTE_SIGNIN } from '@/constants/routes';
-
+import defaultAvatar from '@/images/defaultavatar.jpg';
+import defaultBanner from '@/images/defaultbanner.jpg';
 import { call, put } from 'redux-saga/effects';
 import { signInSuccess, signOutSuccess } from '@/redux/actions/authActions';
 import { clearBasket, setBasketItems } from '@/redux/actions/basketActions';
@@ -91,7 +92,8 @@ function* authSaga({ type, payload }) {
         const fullname = payload.fullname.split(' ').map((name) => name[0].toUpperCase().concat(name.substring(1))).join(' ');
         const user = {
           fullname,
-    
+          avatar: 'https://firebasestorage.googleapis.com/v0/b/ecommerce-777c9.appspot.com/o/avatar%2FcuTpQhZWWOauG16RqRoU42kDmAC2?alt=media&token=21c3781e-d1aa-44f3-8dfc-017670fa9cf2',
+          banner: 'https://firebasestorage.googleapis.com/v0/b/ecommerce-777c9.appspot.com/o/banner%2FcuTpQhZWWOauG16RqRoU42kDmAC2?alt=media&token=819ef433-0604-45ca-bc5b-534d0e2c5994',
           email: payload.email,
           address: '',
           basket: [],
@@ -156,7 +158,8 @@ function* authSaga({ type, payload }) {
         // add the user if auth provider is not password
         const user = {
           fullname: payload.displayName ? payload.displayName : 'User',
-          avatar: payload.photoURL  ,
+          avatar: payload.photoURL ? payload.photoURL : defaultAvatar,
+          banner: defaultBanner,
           email: payload.email,
           address: '',
           basket: [],
