@@ -7,7 +7,7 @@ import {
   SIGNOUT, SIGNUP
 } from '@/constants/constants';
 import { SIGNIN as ROUTE_SIGNIN } from '@/constants/routes';
-import defaultAvatar from "/dist/assets/defaultAvatar.6d69d324.jpg";
+import defaultAvatar from "../../../dist/assets/defaultAvatar.6d69d324.jpg";
 import defaultBanner from "@/images/defaultBanner.jpg";
 import { call, put } from 'redux-saga/effects';
 import { signInSuccess, signOutSuccess } from '@/redux/actions/authActions';
