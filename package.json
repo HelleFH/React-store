@@ -54,6 +54,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
+    "babel-eslint": "^10.1.0",
+    "eslint-plugin-promise": "^6.2.0",
     "firebase": "^8.4.3",
     "formik": "^2.2.6",
     "history": "^4.10.0",
