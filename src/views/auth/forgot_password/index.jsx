@@ -16,7 +16,7 @@ const ForgotPassword = () => {
   const [field, setField] = useState({});
 
   useScrollTop();
-  useDocumentTitle('Forgot Password | Salinaka');
+  useDocumentTitle('Forgot Password | React-Store');
   useEffect(() => {
     if (didMount) {
       setForgotPWStatus(authStatus);
