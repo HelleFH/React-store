@@ -43,7 +43,14 @@ const BasketItem = ({ product }) => {
               </h5>
             </div>
             <div>
-      
+              <span className="spec-title">Color</span>
+              <div style={{
+                backgroundColor: product.selectedColor || product.availableColors[0],
+                width: '15px',
+                height: '15px',
+                borderRadius: '50%'
+              }}
+              />
             </div>
           </div>
         </div>
@@ -66,23 +73,21 @@ BasketItem.propTypes = {
   product: PropType.shape({
     id: PropType.string,
     name: PropType.string,
+    brand: PropType.string,
     price: PropType.number,
     quantity: PropType.number,
     maxQuantity: PropType.number,
     description: PropType.string,
     keywords: PropType.arrayOf(PropType.string),
     selectedSize: PropType.string,
+    selectedColor: PropType.string,
     imageCollection: PropType.arrayOf(PropType.string),
-    sizesWithPrices: PropType.arrayOf(
-      PropType.shape({
-        size: PropType.string.isRequired,
-        price: PropType.number.isRequired
-      })
-    ).isRequired,
+    sizes: PropType.arrayOf(PropType.number),
     image: PropType.string,
     imageUrl: PropType.string,
     isFeatured: PropType.bool,
     isRecommended: PropType.bool,
+    availableColors: PropType.arrayOf(PropType.string)
   }).isRequired
 };
 

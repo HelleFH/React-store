@@ -19,14 +19,10 @@ const ProductItem = ({ product, isItemOnBasket, addToBasket }) => {
 
   const itemOnBasket = isItemOnBasket ? isItemOnBasket(product.id) : false;
 
-const handleAddToBasket = () => {
-  if (!product || !product.sizes || product.sizes.length === 0) {
-    console.error('Product or product sizes are undefined or empty.');
-    return;
-  }
+  const handleAddToBasket = () => {
+    if (addToBasket) addToBasket({ ...product, selectedSize: product.sizes[0] });
+  };
 
-  if (addToBasket) addToBasket({ ...product, selectedSize: product.sizes[0] });
-};
   return (
     <SkeletonTheme color="#e1e1e1" highlightColor="#f2f2f2">
       <div
@@ -55,7 +51,9 @@ const handleAddToBasket = () => {
             <h5 className="product-card-name text-overflow-ellipsis margin-auto">
               {product.name || <Skeleton width={80} />}
             </h5>
-        
+            <p className="product-card-brand">
+              {product.brand || <Skeleton width={60} />}
+            </p>
             <h4 className="product-card-price">
               {product.price ? displayMoney(product.price) : <Skeleton width={40} />}
             </h4>

@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
-import { ImageLoader, MessageDisplay } from '@/components/common';
+import { ColorChooser, ImageLoader, MessageDisplay } from '@/components/common';
 import { ProductShowcaseGrid } from '@/components/product';
 import { RECOMMENDED_PRODUCTS, SHOP } from '@/constants/routes';
 import { displayMoney } from '@/helpers/utils';
@@ -23,7 +23,7 @@ const ViewProduct = () => {
 
   const [selectedImage, setSelectedImage] = useState(product?.image || '');
   const [selectedSize, setSelectedSize] = useState('');
-  const [selectedPrice, setSelectedPrice] = useState(product?.sizesWithPrices[0]?.price || 0);
+  const [selectedColor, setSelectedColor] = useState('');
 
   const {
     recommendedProducts,
@@ -34,20 +34,22 @@ const ViewProduct = () => {
   const colorOverlay = useRef(null);
 
   useEffect(() => {
-    if (product) {
-      setSelectedImage(product.image);
-      setSelectedSize(product.sizesWithPrices[0]?.size || '');
-      setSelectedPrice(product.sizesWithPrices[0]?.price || 0);
-    }
+    setSelectedImage(product?.image);
   }, [product]);
 
   const onSelectedSizeChange = (newValue) => {
-    setSelectedSize(newValue.size);
-    setSelectedPrice(newValue.price);
+    setSelectedSize(newValue.value);
+  };
+
+  const onSelectedColorChange = (color) => {
+    setSelectedColor(color);
+    if (colorOverlay.current) {
+      colorOverlay.current.value = color;
+    }
   };
 
   const handleAddToBasket = () => {
-    addToBasket({ ...product, selectedSize, price: selectedPrice });
+    addToBasket({ ...product, selectedColor, selectedSize: selectedSize || product.sizes[0] });
   };
 
   return (
@@ -89,7 +91,7 @@ const ViewProduct = () => {
               </div>
             )}
             <div className="product-modal-image-wrapper">
-              <input type="color" disabled ref={colorOverlay} id="color-overlay" />
+              {selectedColor && <input type="color" disabled ref={colorOverlay} id="color-overlay" />}
               <ImageLoader
                 alt={product.name}
                 className="product-modal-image"
@@ -98,6 +100,7 @@ const ViewProduct = () => {
             </div>
             <div className="product-modal-details">
               <br />
+              <span className="text-subtle">{product.brand}</span>
               <h1 className="margin-top-0">{product.name}</h1>
               <span>{product.description}</span>
               <br />
@@ -111,12 +114,23 @@ const ViewProduct = () => {
                 <Select
                   placeholder="--Select Size--"
                   onChange={onSelectedSizeChange}
-                  options={product.sizesWithPrices.sort((a, b) => (a.size < b.size ? -1 : 1)).map((size) => ({ label: `${size.size} mm`, value: size.size, size: size.size, price: size.price }))}
+                  options={product.sizes.sort((a, b) => (a < b ? -1 : 1)).map((size) => ({ label: `${size} mm`, value: size }))}
                   styles={{ menu: (provided) => ({ ...provided, zIndex: 10 }) }}
                 />
               </div>
               <br />
-              <h1>{displayMoney(selectedPrice)}</h1>
+              {product.availableColors.length >= 1 && (
+                <div>
+                  <span className="text-subtle">Choose Color</span>
+                  <br />
+                  <br />
+                  <ColorChooser
+                    availableColors={product.availableColors}
+                    onSelectedColorChange={onSelectedColorChange}
+                  />
+                </div>
+              )}
+              <h1>{displayMoney(product.price)}</h1>
               <div className="product-modal-action">
                 <button
                   className={`button button-small ${isItemOnBasket(product.id) ? 'button-border button-border-gray' : ''}`}

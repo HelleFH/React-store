@@ -1,135 +1,89 @@
+import { CheckOutlined } from '@ant-design/icons';
 import { ImageLoader } from '@/components/common';
-import { EDIT_PRODUCT } from '@/constants/routes';
-import { displayActionMessage, displayDate, displayMoney } from '@/helpers/utils';
+import { displayMoney } from '@/helpers/utils';
 import PropType from 'prop-types';
-import React, { useRef } from 'react';
+import React from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import { useDispatch } from 'react-redux';
-import { useHistory, withRouter } from 'react-router-dom';
-import { removeProduct } from '@/redux/actions/productActions';
+import { useHistory } from 'react-router-dom';
 
-const ProductItem = ({ product }) => {
-  const dispatch = useDispatch();
+const ProductItem = ({ product, isItemOnBasket, addToBasket }) => {
   const history = useHistory();
-  const productRef = useRef(null);
 
-  const onClickEdit = () => {
-    history.push(`${EDIT_PRODUCT}/${product.id}`);
+  const onClickItem = () => {
+    if (!product) return;
+
+    if (product.id) {
+      history.push(`/product/${product.id}`);
+    }
   };
 
-  const onDeleteProduct = () => {
-    productRef.current.classList.toggle('item-active');
-  };
+  const itemOnBasket = isItemOnBasket ? isItemOnBasket(product.id) : false;
 
-  const onConfirmDelete = () => {
-    dispatch(removeProduct(product.id));
-    displayActionMessage('Item successfully deleted');
-    productRef.current.classList.remove('item-active');
-  };
-
-  const onCancelDelete = () => {
-    productRef.current.classList.remove('item-active');
+  const handleAddToBasket = () => {
+    if (addToBasket) addToBasket({ ...product, selectedSize: product.sizes[0] });
   };
 
   return (
-    <SkeletonTheme
-      color="#e1e1e1"
-      highlightColor="#f2f2f2"
-    >
+    <SkeletonTheme color="#e1e1e1" highlightColor="#f2f2f2">
       <div
-        className={`item item-products ${!product.id && 'item-loading'}`}
-        ref={productRef}
+        className={`product-card ${!product.id ? 'product-loading' : ''}`}
+        style={{
+          border: product && itemOnBasket ? '1px solid #a6a5a5' : '',
+          boxShadow: product && itemOnBasket ? '0 10px 15px rgba(0, 0, 0, .07)' : 'none'
+        }}
       >
-        <div className="grid grid-count-6">
-          <div className="grid-col item-img-wrapper">
+        {itemOnBasket && <CheckOutlined className="fa fa-check product-card-check" />}
+        <div
+          className="product-card-content"
+          onClick={onClickItem}
+          role="presentation"
+        >
+          <div className="product-card-img-wrapper">
             {product.image ? (
               <ImageLoader
                 alt={product.name}
-                className="item-img"
+                className="product-card-img"
                 src={product.image}
               />
-            ) : <Skeleton width={50} height={30} />}
+            ) : <Skeleton width="100%" height="90%" />}
           </div>
-          <div className="grid-col">
-            <span className="text-overflow-ellipsis">{product.name || <Skeleton width={50} />}</span>
-          </div>
-      
-          <div className="grid-col">
-            <span>{product.price ? displayMoney(product.price) : <Skeleton width={30} />}</span>
-          </div>
-          <div className="grid-col">
-            <span>
-              {product.dateAdded ? displayDate(product.dateAdded) : <Skeleton width={30} />}
-            </span>
-          </div>
-          <div className="grid-col">
-            <span>{product.maxQuantity || <Skeleton width={20} />}</span>
+          <div className="product-details">
+            <h5 className="product-card-name text-overflow-ellipsis margin-auto">
+              {product.name || <Skeleton width={80} />}
+            </h5>
+            <p className="product-card-brand">
+              {product.brand || <Skeleton width={60} />}
+            </p>
+            <h4 className="product-card-price">
+              {product.price ? displayMoney(product.price) : <Skeleton width={40} />}
+            </h4>
           </div>
         </div>
         {product.id && (
-          <div className="item-action">
-            <button
-              className="button button-border button-small"
-              onClick={onClickEdit}
-              type="button"
-            >
-              Edit
-            </button>
-            &nbsp;
-            <button
-              className="button button-border button-small button-danger"
-              onClick={onDeleteProduct}
-              type="button"
-            >
-              Delete
-            </button>
-            <div className="item-action-confirm">
-              <h5>Are you sure you want to delete this?</h5>
-              <button
-                className="button button-small button-border"
-                onClick={onCancelDelete}
-                type="button"
-              >
-                No
-              </button>
-              &nbsp;
-              <button
-                className="button button-small button-danger"
-                onClick={onConfirmDelete}
-                type="button"
-              >
-                Yes
-              </button>
-            </div>
-          </div>
+          <button
+            className={`product-card-button button-small button button-block ${itemOnBasket ? 'button-border button-border-gray' : ''}`}
+            onClick={handleAddToBasket}
+            type="button"
+          >
+            {itemOnBasket ? 'Remove from basket' : 'Add to basket'}
+          </button>
         )}
+
       </div>
     </SkeletonTheme>
   );
 };
 
-ProductItem.propTypes = {
-  product: PropType.shape({
-    id: PropType.string,
-    name: PropType.string,
-    price: PropType.number,
-    maxQuantity: PropType.number,
-    description: PropType.string,
-    keywords: PropType.arrayOf(PropType.string),
-    imageCollection: PropType.arrayOf(PropType.object),
-    sizesWithPrices: PropType.arrayOf(
-      PropType.shape({
-        size: PropType.string.isRequired,
-        price: PropType.number.isRequired
-      })
-    ).isRequired,
-        image: PropType.string,
-    imageUrl: PropType.string,
-    isFeatured: PropType.bool,
-    isRecommended: PropType.bool,
-    dateAdded: PropType.number,
-    availableColors: PropType.arrayOf(PropType.string)
-  }).isRequired
+ProductItem.defaultProps = {
+  isItemOnBasket: undefined,
+  addToBasket: undefined
 };
 
-export default withRouter(ProductItem);
+ProductItem.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  product: PropType.object.isRequired,
+  isItemOnBasket: PropType.func,
+  addToBasket: PropType.func
+};
+
+export default ProductItem;
